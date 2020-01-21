@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>えきのなまえマップ</title>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel='stylesheet' href='https://api.tiles.mapbox.com/mapbox-gl-js/v1.6.1/mapbox-gl.css' />
+    <style>
+        body { margin: 0; padding: 0; }
+        html, body { height: 100%; }
+        #map { position:absolute; top:0; bottom:0; width:100%; }
+
+        .map-layer {
+            font: 12px/20px 'Helvetica Neue', Arial, Helvetica, sans-serif;
+            position: absolute;
+            width: 90px;
+            top: 0;
+            left: 0;
+            padding: 10px;
+        }
+
+        .map-layer .map-layer-inner {
+            background-color: #fff;
+            border-radius: 5px;
+            padding: 5px;
+            margin-bottom: 10px;
+            box-shadow:0 0 0 2px rgba(0,0,0,0.1);
+        }
+
+        .map-layer-inner fieldset {
+            border: none;
+            padding: 0;
+            margin: 0 0 5px;
+        }
+
+        .map-layer-inner fieldset:last-child {
+            margin: 0;
+        }
+
+        .map-layer-inner select {
+            width: 100%;
+        }
+
+        .map-layer-inner label {
+            display: block;
+            font-weight: bold;
+            margin: 0 0 5px;
+        }
+
+    </style>
+</head>
+
+<body>
+<div id='map'></div>
+<div class='map-layer top'>
+    <div class='map-layer-inner'>
+        <fieldset>
+            <label>地図を選択</label>
+            <select id='layer' name='layer' onchange='onlayer(this)'>
+                <option value='kana'>ひらがな</option>
+                <option value='kanji'>漢字</option>
+            </select>
+        </fieldset>
+    </div>
+</div>
+
+<script src='https://api.tiles.mapbox.com/mapbox-gl-js/v1.6.1/mapbox-gl.js'></script>
+<script>
+var accessToken = 'mt-pk.eyJ1IjoibWFwaW9uIiwiYSI6InJ5ZXFiOWJyZ3J2MjV3ZDcyNXY3Z3dmYzYifQ.XoOA7fe-5nUi8ALSyCl277';
+var styleUrl = 'https://vt-cm01.mapion.co.jp/gl-server/style/lab.hiragana.json?access_token=' + accessToken;
+
+function onlayer(select) {
+    switch (select.value) {
+        case 'kana':
+            map.setLayoutProperty('ひらがな都道府県Z=6-8未満', 'visibility', 'visible');
+            map.setLayoutProperty('ひらがな駅名_そのほか', 'visibility', 'visible');
+            map.setLayoutProperty('ひらがな駅名_地下鉄_路面電車', 'visibility', 'visible');
+            map.setLayoutProperty('ひらがな駅名_私鉄', 'visibility', 'visible');
+            map.setLayoutProperty('ひらがな駅名_JR', 'visibility', 'visible');
+            map.setLayoutProperty('ひらがな自治体名', 'visibility', 'visible');
+            map.setLayoutProperty('ひらがな都道府県Z=8-11未満', 'visibility', 'visible');
+            map.setLayoutProperty('漢字_都道府県名', 'visibility', 'none');
+            map.setLayoutProperty('漢字_駅名_そのほか', 'visibility', 'none');
+            map.setLayoutProperty('漢字_駅名_地下鉄_路面鉄道', 'visibility', 'none');
+            map.setLayoutProperty('漢字_駅名_私鉄', 'visibility', 'none');
+            map.setLayoutProperty('漢字_駅名_JR', 'visibility', 'none');
+            map.setLayoutProperty('漢字_市区町村名', 'visibility', 'none');
+            break;
+        case 'kanji':
+            map.setLayoutProperty('ひらがな都道府県Z=6-8未満', 'visibility', 'none');
+            map.setLayoutProperty('ひらがな駅名_そのほか', 'visibility', 'none');
+            map.setLayoutProperty('ひらがな駅名_地下鉄_路面電車', 'visibility', 'none');
+            map.setLayoutProperty('ひらがな駅名_私鉄', 'visibility', 'none');
+            map.setLayoutProperty('ひらがな駅名_JR', 'visibility', 'none');
+            map.setLayoutProperty('ひらがな自治体名', 'visibility', 'none');
+            map.setLayoutProperty('ひらがな都道府県Z=8-11未満', 'visibility', 'none');
+            map.setLayoutProperty('漢字_都道府県名', 'visibility', 'visible');
+            map.setLayoutProperty('漢字_駅名_そのほか', 'visibility', 'visible');
+            map.setLayoutProperty('漢字_駅名_地下鉄_路面鉄道', 'visibility', 'visible');
+            map.setLayoutProperty('漢字_駅名_私鉄', 'visibility', 'visible');
+            map.setLayoutProperty('漢字_駅名_JR', 'visibility', 'visible');
+            map.setLayoutProperty('漢字_市区町村名', 'visibility', 'visible');
+            break;
+        default:
+    }
+
+}
+
+var map; // for external use
+
+var DEFAULT_CENTER = [139.749792, 35.641690];
+var DEFAULT_ZOOM_LEVEL = 13;
+
+if (!mapboxgl.supported()) {
+    alert('Your browser does not support Mapion GL');
+}
+
+map = new mapboxgl.Map({
+    container: 'map',
+    center: DEFAULT_CENTER,
+    zoom: DEFAULT_ZOOM_LEVEL,
+    minZoom: 5,
+    maxZoom: 16,
+    style: styleUrl,
+    hash: true,
+    localIdeographFontFamily: "'MS Gothic', 'Hiragino Sans', sans-serif",
+    logoPosition: 'bottom-right',
+});
+
+map.addControl(new mapboxgl.NavigationControl());
+map.addControl(new mapboxgl.GeolocateControl());
+map.addControl(new mapboxgl.FullscreenControl());
+map.addControl(new mapboxgl.ScaleControl());
+
+</script>
+</body>
+</html>
