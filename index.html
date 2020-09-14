@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html>
+
 <head>
     <title>えきのなまえマップ</title>
     <meta charset='utf-8'>
@@ -7,132 +8,143 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel='stylesheet' href='https://api.tiles.mapbox.com/mapbox-gl-js/v1.6.1/mapbox-gl.css' />
     <style>
-        body { margin: 0; padding: 0; }
-        html, body { height: 100%; }
-        #map { position:absolute; top:0; bottom:0; width:100%; }
-
-        .map-layer {
-            font: 12px/20px 'Helvetica Neue', Arial, Helvetica, sans-serif;
-            position: absolute;
-            width: 90px;
-            top: 0;
-            left: 0;
-            padding: 10px;
-        }
-
-        .map-layer .map-layer-inner {
-            background-color: #fff;
-            border-radius: 5px;
-            padding: 5px;
-            margin-bottom: 10px;
-            box-shadow:0 0 0 2px rgba(0,0,0,0.1);
-        }
-
-        .map-layer-inner fieldset {
-            border: none;
-            padding: 0;
-            margin: 0 0 5px;
-        }
-
-        .map-layer-inner fieldset:last-child {
+        body {
             margin: 0;
+            padding: 0;
         }
 
-        .map-layer-inner select {
+        html,
+        body {
+            height: 100%;
+        }
+
+        #map {
+            position: absolute;
+            top: 0;
+            bottom: 0;
             width: 100%;
         }
 
-        .map-layer-inner label {
-            display: block;
-            font-weight: bold;
-            margin: 0 0 5px;
+        .mapboxgl-popup-content {
+            font-size: 14px;
+            line-height: 24px;
         }
 
     </style>
 </head>
 
 <body>
-<div id='map'></div>
-<div class='map-layer top'>
-    <div class='map-layer-inner'>
-        <fieldset>
-            <label>地図を選択</label>
-            <select id='layer' name='layer' onchange='onlayer(this)'>
-                <option value='kana'>ひらがな</option>
-                <option value='kanji'>漢字</option>
-            </select>
-        </fieldset>
-    </div>
-</div>
+    <div id='map'></div>
 
-<script src='https://api.tiles.mapbox.com/mapbox-gl-js/v1.6.1/mapbox-gl.js'></script>
-<script>
-var accessToken = 'mt-pk.eyJ1IjoibWFwaW9uIiwiYSI6InJ5ZXFiOWJyZ3J2MjV3ZDcyNXY3Z3dmYzYifQ.XoOA7fe-5nUi8ALSyCl277';
-var styleUrl = 'https://vt-cm01.mapion.co.jp/gl-server/style/lab.hiragana.json?access_token=' + accessToken;
+    <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v1.6.1/mapbox-gl.js'></script>
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
 
-function onlayer(select) {
-    switch (select.value) {
-        case 'kana':
-            map.setLayoutProperty('ひらがな都道府県Z=6-8未満', 'visibility', 'visible');
-            map.setLayoutProperty('ひらがな駅名_そのほか', 'visibility', 'visible');
-            map.setLayoutProperty('ひらがな駅名_地下鉄_路面電車', 'visibility', 'visible');
-            map.setLayoutProperty('ひらがな駅名_私鉄', 'visibility', 'visible');
-            map.setLayoutProperty('ひらがな駅名_JR', 'visibility', 'visible');
-            map.setLayoutProperty('ひらがな自治体名', 'visibility', 'visible');
-            map.setLayoutProperty('ひらがな都道府県Z=8-11未満', 'visibility', 'visible');
-            map.setLayoutProperty('漢字_都道府県名', 'visibility', 'none');
-            map.setLayoutProperty('漢字_駅名_そのほか', 'visibility', 'none');
-            map.setLayoutProperty('漢字_駅名_地下鉄_路面鉄道', 'visibility', 'none');
-            map.setLayoutProperty('漢字_駅名_私鉄', 'visibility', 'none');
-            map.setLayoutProperty('漢字_駅名_JR', 'visibility', 'none');
-            map.setLayoutProperty('漢字_市区町村名', 'visibility', 'none');
-            break;
-        case 'kanji':
-            map.setLayoutProperty('ひらがな都道府県Z=6-8未満', 'visibility', 'none');
-            map.setLayoutProperty('ひらがな駅名_そのほか', 'visibility', 'none');
-            map.setLayoutProperty('ひらがな駅名_地下鉄_路面電車', 'visibility', 'none');
-            map.setLayoutProperty('ひらがな駅名_私鉄', 'visibility', 'none');
-            map.setLayoutProperty('ひらがな駅名_JR', 'visibility', 'none');
-            map.setLayoutProperty('ひらがな自治体名', 'visibility', 'none');
-            map.setLayoutProperty('ひらがな都道府県Z=8-11未満', 'visibility', 'none');
-            map.setLayoutProperty('漢字_都道府県名', 'visibility', 'visible');
-            map.setLayoutProperty('漢字_駅名_そのほか', 'visibility', 'visible');
-            map.setLayoutProperty('漢字_駅名_地下鉄_路面鉄道', 'visibility', 'visible');
-            map.setLayoutProperty('漢字_駅名_私鉄', 'visibility', 'visible');
-            map.setLayoutProperty('漢字_駅名_JR', 'visibility', 'visible');
-            map.setLayoutProperty('漢字_市区町村名', 'visibility', 'visible');
-            break;
-        default:
-    }
+    <script>
+        var accessToken = 'mt-pk.eyJ1IjoibWFwaW9uLXRlY2giLCJhIjoiMDhub25vdGowamV4c3RodTEyY3M0bm4weCJ9.rdcKNcDmQnORu1pEUxiD6q';
+        var styleUrl = 'https://vt-cm01.mapion.co.jp/gl-server/style/media-kana.json?access_token=' + accessToken;
 
-}
+        var map; // for external use
 
-var map; // for external use
+        var DEFAULT_CENTER = [139.76099, 35.68373];
+        var DEFAULT_ZOOM_LEVEL = 13;
 
-var DEFAULT_CENTER = [139.76099, 35.68373];
-var DEFAULT_ZOOM_LEVEL = 13;
+        if (!mapboxgl.supported()) {
+            alert('Your browser does not support Mapion GL');
+        }
 
-if (!mapboxgl.supported()) {
-    alert('Your browser does not support Mapion GL');
-}
+        map = new mapboxgl.Map({
+            container: 'map',
+            center: DEFAULT_CENTER,
+            zoom: DEFAULT_ZOOM_LEVEL,
+            minZoom: 5,
+            maxZoom: 16,
+            style: styleUrl,
+            hash: true,
+            localIdeographFontFamily: "'MS Gothic', 'Hiragino Sans Regular', sans-serif",
+            logoPosition: 'bottom-right',
+        });
 
-map = new mapboxgl.Map({
-    container: 'map',
-    center: DEFAULT_CENTER,
-    zoom: DEFAULT_ZOOM_LEVEL,
-    minZoom: 5,
-    maxZoom: 16,
-    style: styleUrl,
-    hash: true,
-    localIdeographFontFamily: "'MS Gothic', 'Hiragino Sans', sans-serif",
-    logoPosition: 'bottom-right',
-});
+        map.addControl(new mapboxgl.NavigationControl());
+        map.addControl(new mapboxgl.GeolocateControl());
+        map.addControl(new mapboxgl.FullscreenControl());
+        map.addControl(new mapboxgl.ScaleControl());
 
-map.addControl(new mapboxgl.NavigationControl());
-map.addControl(new mapboxgl.GeolocateControl());
-map.addControl(new mapboxgl.FullscreenControl());
-map.addControl(new mapboxgl.ScaleControl());
+        map.on('click', 'ひらがな駅名_JR', function(e) {
+            poiSearchStation(e);
+        });
+        map.on('click', 'ひらがな駅名_そのほか', function(e) {
+            poiSearchStation(e);
+        });
+        map.on('click', 'ひらがな駅名_地下鉄_路面電車', function(e) {
+            poiSearchStation(e);
+        });
+        map.on('click', 'ひらがな駅名_私鉄', function(e) {
+            poiSearchStation(e);
+        });
+        map.on('click', 'ひらがな自治体名', function(e) {
+            poiSearchCity(e);
+        });
 
-</script>
+        function poiSearchStation(e) {
+
+            var stationName = e.features[0].properties.railroad_line_hosoku_name;
+
+            var url = 'http://search.mapion.co.jp/search/station2/local'
+            var searchData = {};
+            searchData['key'] = 'ekinonamae';
+            searchData['wt'] = 'json';
+            searchData['lat'] = e.features[0].properties.wgs_lat;
+            searchData['lon'] = e.features[0].properties.wgs_lon;
+            searchData['radius'] = 1000;
+            searchData['dtm'] = 'wgs';
+            searchData['q'] = e.features[0].properties.railroad_line_hosoku_name;
+            searchData['fl'] = 'poi_code,poi_name,poi_yomi,line_name';
+            $.ajax({
+                type: 'GET',
+                url: url,
+                dataType: 'jsonp',
+                data: searchData,
+                jsonp: "json.wrf"
+            }).then(
+                function(data) {
+
+                    description = '<strong>' + stationName + '</strong>';
+
+                    if (data.response.docs.length > 0) {
+
+                        // 路線一覧を追加
+                        for (var linename of data.response.docs[0].line_name) {
+                            description = description + '<br />' + linename;
+                        }
+                        //マピオン電話帳へのリンクを追加
+                        description = description + '<br /><a href= "https://www.mapion.co.jp/station/' + data.response.docs[0].poi_code + '/" target="_blank" rel="noopener noreferrer">マピオン電話帳へ</a>';
+                    }
+                    poiOnClick(e, description);
+
+                },
+                function(data) {
+                    console.log('電話帳データ検索失敗');
+                    description = '<strong>' + stationName + '</strong>';   
+                    poiOnClick(e, description);
+                });
+        }
+
+        function poiSearchCity(e) {
+            description = '<strong>' + e.features[0].properties.city_name + '</strong>';
+            poiOnClick(e, description);
+        }
+
+        function poiOnClick(e, description) {
+            if (description) {
+                new mapboxgl.Popup()
+                    .setLngLat(e.lngLat)
+                    .setHTML(description)
+                    .addTo(map);
+            }
+        }
+
+    </script>
 </body>
+
 </html>
